@@ -111,4 +111,24 @@ def keyHuntHeuristic(state, problem):
     """
     position = state[0]
     "*** YOUR CODE HERE ***"
-    return 0   # the trivial (but consistent!) heuristic
+    rem_keys=state[1]
+    maze=problem.maze
+    memory=problem.heuristicInfo
+    if len(rem_keys)==0:
+        return mazeDistance(position,problem.exit,maze,memory)
+    keys=list(rem_keys)
+    best=0
+    for k in keys:
+        cost=mazeDistance(position,k,maze,memory)+mazeDistance(k,problem.exit,maze,memory)
+        best=max(best,cost)
+    
+    for i in range(len(keys)):
+        for j in range(i+1,len(keys)):
+            a=keys[i]
+            b=keys[j]
+            disBetA_b=mazeDistance(a,b,maze,memory)
+            aFirst=mazeDistance(position,a,maze,memory)+ disBetA_b + mazeDistance(b,problem.exit,maze,memory)
+            bFirst=mazeDistance(position,b,maze,memory)+ disBetA_b + mazeDistance(a,problem.exit,maze,memory)
+            best=max(best,min(aFirst,bFirst))
+            
+    return best
