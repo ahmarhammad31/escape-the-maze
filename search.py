@@ -72,14 +72,14 @@ def depthFirstSearch(problem):
     fringe.push((problem.getStartState(), []))
     expanded = set()
     while not fringe.isEmpty():
-      current, path = fringe.pop()
-      if problem.isGoalState(current):
+        current, path = fringe.pop()
+        if problem.isGoalState(current):
             return path
-      if current in expanded:
+        if current in expanded:
             continue
-      expanded.add(current)
-    for successor, move, stepCost in problem.getSuccessors(current):
-                 fringe.push((successor,path+ [move]))
+        expanded.add(current)
+        for successor, move, stepCost in problem.getSuccessors(current):
+            fringe.push((successor, path + [move]))
     return None
     
 
@@ -158,8 +158,7 @@ def iterativeDeepeningSearch(problem, maxDepth=10000):
     (or none within maxDepth).
     """
     "*** YOUR CODE HERE ***"
-    def iterativeDeepeningSearch(problem, maxDepth=10000):
-      for limit in range(maxDepth+1):
+    for limit in range(maxDepth+1):
         res = depthLimitedSearch(problem, limit)
         if res is not CUTOFF:
             return res
@@ -246,7 +245,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             return actions
         if state not in expanded:
             expanded.add(state)
-            for nextSt,act,cost in problem.getSuccessor(state):
+            for nextSt,act,cost in problem.getSuccessors(state):
                 newG=g+cost
                 f=newG+heuristic(nextSt,problem)
                 fringe.push((nextSt,actions+[act],newG),f)
@@ -262,4 +261,3 @@ ids = iterativeDeepeningSearch
 ucs = uniformCostSearch
 gbfs = greedyBestFirstSearch
 astar = aStarSearch
-
