@@ -64,10 +64,6 @@ class KeyHuntProblem(SearchProblem):
         self.maze.cost(nextPosition) for the step cost.
         """
         # Bookkeeping. Keep these two lines.
-        self._expanded += 1
-        self._expandedOrder.append(state[0])
-
-        successors = []
         "*** YOUR CODE HERE ***"
         self._expanded += 1
         self._expandedOrder.append(state[0])
