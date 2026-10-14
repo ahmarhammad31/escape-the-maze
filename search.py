@@ -68,9 +68,20 @@ def depthFirstSearch(problem):
     (state, actionsSoFar) is an easy way to remember how you got there.
     """
     "*** YOUR CODE HERE ***"
+    fringe = Stack()
+    fringe.push((problem.getStartState(), []))
+    expanded = set()
+    while not fringe.isEmpty():
+      current, path = fringe.pop()
+      if problem.isGoalState(current):
+            return path
+      if current in expanded:
+            continue
+      expanded.add(current)
+    for successor, move, stepCost in problem.getSuccessors(current):
+                 fringe.push((successor,path+ [move]))
+    return None
     
-    util.raiseNotDefined()
-
 
 # ----------------------------------------------------------------------
 # Q2: Breadth-First Search
@@ -114,7 +125,27 @@ def depthLimitedSearch(problem, limit):
     by not revisiting a state that is already on the current path.
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    def recursive(state, path, pathStates, dep):
+        if problem.isGoalState(state):
+            return path
+        if dep== limit:
+            return CUTOFF
+        cutoffOccurred = False
+        for successor, move, stepCost in problem.getSuccessors(state):
+            if successor in pathStates:
+                continue
+            pathStates.add(successor)
+            res= recursive(successor, path+[move], pathStates, dep+ 1)
+            pathStates.remove(successor)
+            if res is CUTOFF:
+                cutoffOccurred = True      
+            elif res is not None:
+                return res              
+        if cutoffOccurred:
+            return CUTOFF
+        return None
+    start = problem.getStartState()
+    return recursive(start, [], {start}, 0)
 
 
 # ----------------------------------------------------------------------
@@ -127,8 +158,13 @@ def iterativeDeepeningSearch(problem, maxDepth=10000):
     (or none within maxDepth).
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
-
+    def iterativeDeepeningSearch(problem, maxDepth=10000):
+      for limit in range(maxDepth+1):
+        res = depthLimitedSearch(problem, limit)
+        if res is not CUTOFF:
+            return res
+    return None
+    
 
 # ----------------------------------------------------------------------
 # Q5: Uniform-Cost Search
@@ -136,8 +172,33 @@ def iterativeDeepeningSearch(problem, maxDepth=10000):
 def uniformCostSearch(problem):
     """Search the node of least total path cost g(n) first (graph search)."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    fringe = PriorityQueue()
+    fringe.push((problem.getStartState(), [], 0), 0)
+    visited = set()
+ 
+    while not fringe.isEmpty():
+ 
+        current, path, total = fringe.pop()
+ 
+        
+        if problem.isGoalState(current):
+            return path
+ 
+       
+        if current in visited:
+            continue
+ 
+       
+        visited.add(current)
+ 
+        
+        for successor, move, stepCost in problem.getSuccessors(current):
+            new_cost =total+ stepCost
+            fringe.push((successor, path + [move], new_cost), new_cost)
+ 
 
+    return None
+    
 
 # ----------------------------------------------------------------------
 # Q6: Greedy Best-First Search

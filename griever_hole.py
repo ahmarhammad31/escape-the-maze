@@ -45,13 +45,16 @@ class KeyHuntProblem(SearchProblem):
     def getStartState(self):
         """Returns the start state, a tuple (startPosition, ...)."""
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        left = frozenset(k for k in self.keys if k != self.startPosition)
+        return (self.startPosition, left)
 
     def isGoalState(self, state):
         """True when every code piece has been collected AND Thomas is at the exit."""
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
-
+        pos, left= state
+        return (not left) and pos== self.exit
+        
+        
     def getSuccessors(self, state):
         """
         Returns a list of (successor, action, stepCost) triples.
@@ -66,9 +69,17 @@ class KeyHuntProblem(SearchProblem):
 
         successors = []
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
-        return successors
+        self._expanded += 1
+        self._expandedOrder.append(state[0])
 
+        res = []
+        pos, left = state
+        for move, nextPosition in self.maze.neighbors(pos):
+            stepCost = self.maze.cost(nextPosition)
+            Remaining = left - {nextPosition}
+            res.append(((nextPosition, Remaining), move, stepCost))
+        return res
+    
     # --- Provided: you do not need to change anything below -------------
     def getCostOfActions(self, actions):
         """Total step cost of a sequence of actions (inf if it hits a wall)."""
@@ -90,6 +101,7 @@ class KeyHuntProblem(SearchProblem):
 
     def expandedPositions(self):
         return list(self._expandedOrder)
+
 
 
 def keyHuntHeuristic(state, problem):
