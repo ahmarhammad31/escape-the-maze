@@ -125,7 +125,7 @@ def depthLimitedSearch(problem, limit):
     by not revisiting a state that is already on the current path.
     """
     "*** YOUR CODE HERE ***"
-    def recursive(state, path, pathStates, dep):
+    def recursive(state, path, pathStates, dep):#pathStates: the states already visited on this current path. DLS uses it to avoid looping back to one of them
         if problem.isGoalState(state):
             return path
         if dep== limit:
